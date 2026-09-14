@@ -1,0 +1,45 @@
+services:
+  spark-master:
+    image: bde2020/spark-master:3.3.0-hadoop3.3
+    container_name: spark-master
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    environment:
+      - INIT_DAEMON_STEP=setup_spark
+      - SPARK_MODE=master
+    env_file:
+      - ../.env_kafka_connect
+    volumes:
+      - ./jars:/opt/spark/jars
+
+  spark-worker:
+    image: bde2020/spark-worker:3.3.0-hadoop3.3
+    container_name: spark-worker
+    ports:
+      - "8090:8081"
+    environment:
+      - SPARK_MASTER=spark://spark-master:7077
+      - SPARK_MODE=worker
+    env_file:
+      - ../.env_kafka_connect
+    depends_on:
+      - spark-master
+    volumes:
+      - ./jars:/opt/spark/jars
+
+  jupyter-notebook:
+    image: jupyter/pyspark-notebook:latest
+    container_name: jupyter-notebook
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./notebooks:/home/jovyan/work
+      - ./jars:/opt/spark/jars
+    environment:
+      - SPARK_MASTER=spark://spark-master:7077
+    command: start-notebook.sh --NotebookApp.token=''
+    env_file:
+      - ../.env_kafka_connect
+    depends_on:
+      - spark-master
