@@ -1,19 +1,19 @@
-# Ambiente virtual Python
+# Python virtual environment
 venv/
 __pycache__/
 *.pyc
 
-# Credenciais e variáveis de ambiente (nunca versionar)
+# Credentials and environment variables (never commit)
 .env_kafka_connect
 
-# Dependências Java baixadas manualmente (ver README)
+# Java dependencies downloaded manually (see README)
 *.jar
 
-# Checkpoints do Jupyter
+# Jupyter checkpoints
 .ipynb_checkpoints/
 
 # IDEs
 .idea/
 
-# Material de estudo fora do escopo deste projeto
+# Study material out of scope for this project
 postgres/teste.py
